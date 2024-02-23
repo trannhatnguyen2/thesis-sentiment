@@ -9,11 +9,10 @@ from torch.utils.data import Dataset, DataLoader
 # from sklearn.model_selection import train_test_split
 from transformers import get_linear_schedule_with_warmup, AutoTokenizer, AutoModel, logging
 
-# from sentiment_app.utils.loader import dataset_loader
+tokenizer = AutoTokenizer.from_pretrained("./phobert-base-v2", use_fast=True)
 
-tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base-v2", use_fast=True)
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-class_names =['Tiêu cực', 'Tích cực']
+class_names = ['Tiêu cực', 'Tích cực']
 
 class SentimentClassifier(nn.Module):
   def __init__(self, n_classes):
@@ -39,7 +38,7 @@ class SentimentClassifier(nn.Module):
 def predict_pipeline(text, max_len=120):
     model = SentimentClassifier(n_classes=2).to(device)
     model.to(device)
-    model.load_state_dict(torch.load('./sentiment_app/model_storage/phobert_fold5.pth', map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load('./model_storage/phobert_fold5.pth', map_location=torch.device('cpu')))
     model.eval()
     encoded_review = tokenizer.encode_plus(
         text,

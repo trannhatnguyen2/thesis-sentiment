@@ -3,7 +3,7 @@ import uvicorn
 from pydantic import BaseModel
 from loguru import logger
 
-from sentiment_app.model.model import predict_pipeline
+from model.model import predict_pipeline
 
 cache = {}
 
