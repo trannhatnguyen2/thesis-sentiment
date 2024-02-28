@@ -17,18 +17,17 @@ class PredictionOut(BaseModel):
     sentiment: str
 
 @app.get('/')
-def home():
+async def home():
     return {'text': "Nguyen's Thesis"}
 
 @app.post("/predict", response_model=PredictionOut)
-def predict(payload: TextIn):
+async def predict(payload: TextIn):
 
     if payload.review != '':
         review_handled = preprocessing(payload.review)
         sentiment = predict_pipeline(review_handled)
 
     return {"sentiment": sentiment}
-
 
 if __name__ == '__main__':
     uvicorn.run(app)
