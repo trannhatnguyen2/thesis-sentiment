@@ -1,4 +1,6 @@
-FROM anibali/pytorch:2.0.1-cuda11.8-ubuntu22.04
+# FROM anibali/pytorch:2.0.1-cuda11.8-ubuntu22.04
+
+FROM python:3.9
 
 WORKDIR /app
 
@@ -16,7 +18,7 @@ COPY ./preprocess /app/preprocess
 
 COPY ./phobert-base-v2 /app/phobert-base-v2
 
-EXPOSE 8001
+EXPOSE 30000
 
 RUN pip install -r requirements.txt --no-cache-dir
 
