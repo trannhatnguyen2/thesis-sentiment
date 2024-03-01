@@ -19,7 +19,7 @@ from preprocess.preprocessing  import preprocessing
 start_http_server(port=8099, addr="0.0.0.0")
 
 # Service name is required for most backends
-resource = Resource(attributes={SERVICE_NAME: "ocr-service"})
+resource = Resource(attributes={SERVICE_NAME: "sentiment-service"})
 
 # Exporter to export metrics to Prometheus
 reader = PrometheusMetricReader()
@@ -27,17 +27,17 @@ reader = PrometheusMetricReader()
 # Meter is responsible for creating and recording metrics
 provider = MeterProvider(resource=resource, metric_readers=[reader])
 set_meter_provider(provider)
-meter = metrics.get_meter("myocr", "0.1.2")
+meter = metrics.get_meter("mysentiment", "0.1.2")
 
 # Create your first counter
 counter = meter.create_counter(
-    name="OCR_request_counter",
-    description="Number of OCR requests"
+    name="Sentiment_request_counter",
+    description="Number of Sentiment requests"
 )
 
 histogram = meter.create_histogram(
-    name="OCR_response_histogram",
-    description="OCR response histogram",
+    name="Sentiment_response_histogram",
+    description="Sentiment response histogram",
     unit="seconds",
 )
 

@@ -1,19 +1,20 @@
 from time import sleep
-
 import requests
 from loguru import logger
+from pydantic import BaseModel
+
+class TextIn(BaseModel):
+    review: str
 
 def predict():
     logger.info("Sending POST requests!")
-    files = {
-        "file": open("./examples/receipt.jpg", "rb"),
-    }
+    data = TextIn(review='Xấu tệ.')
     response = requests.post(
-        "http://localhost:8088/ocr",
+        "http://localhost:30000/predict",
         headers={
             "accept": "application/json",
         },
-        files=files
+        data=data.json()
     )
 
 
