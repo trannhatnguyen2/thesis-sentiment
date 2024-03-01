@@ -1,12 +1,6 @@
 import torch
-# import numpy as np
-# import pandas as pd
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-# from gensim.utils import simple_preprocess
-# from sklearn.model_selection import StratifiedKFold
-# from sklearn.metrics import classification_report, confusion_matrix
-# from sklearn.model_selection import train_test_split
 from transformers import get_linear_schedule_with_warmup, AutoTokenizer, AutoModel, logging
 
 tokenizer = AutoTokenizer.from_pretrained("./phobert-base-v2", use_fast=True)

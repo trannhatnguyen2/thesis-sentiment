@@ -8,7 +8,7 @@ pipeline {
 
     environment{
         registry = 'trannhatnguyen2/sentiment'
-        registryCredential = 'dockerhub'      
+        registryCredential = 'dockerhub'
     }
 
     stages {
