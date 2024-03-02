@@ -30,11 +30,17 @@ class SentimentClassifier(nn.Module):
     return x
 
 
+# Load model first
+model = SentimentClassifier(n_classes=2).to(device)
+model.to(device)
+model.load_state_dict(torch.load('./model_storage/phobert_fold5.pth'))
+model.eval()
+
 def predict_pipeline(text, max_len=120):
-    model = SentimentClassifier(n_classes=2).to(device)
-    model.to(device)
-    model.load_state_dict(torch.load('./model_storage/phobert_fold5.pth'))
-    model.eval()
+    # model = SentimentClassifier(n_classes=2).to(device)
+    # model.to(device)
+    # model.load_state_dict(torch.load('./model_storage/phobert_fold5.pth'))
+    # model.eval()
     encoded_review = tokenizer.encode_plus(
         text,
         max_length=max_len,
@@ -51,9 +57,6 @@ def predict_pipeline(text, max_len=120):
 
     output = model(input_ids, attention_mask)
     _, y_pred = torch.max(output, dim=1)
-
-    # print(f'Text: {text}')
-    # print(f'Sentiment: {class_names[y_pred]}')
 
     return str(class_names[y_pred])
 

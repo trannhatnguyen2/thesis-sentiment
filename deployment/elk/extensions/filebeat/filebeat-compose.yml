@@ -16,6 +16,7 @@ services:
       # 'config/filebeat.yml' even if it's not owned by root.
       # see: https://www.elastic.co/guide/en/beats/libbeat/current/config-file-permissions.html
       - --strict.perms=false
+    restart: unless-stopped
     volumes:
       - ./extensions/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
       # Thực hiện mount ./extensions/filebeat/config/filebeat.yml vào docker container

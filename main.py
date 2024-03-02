@@ -43,6 +43,12 @@ from opentelemetry import metrics
 from opentelemetry.exporter.prometheus import PrometheusMetricReader
 from opentelemetry.metrics import set_meter_provider
 from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.trace import get_tracer_provider, set_tracer_provider
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from prometheus_client import start_http_server
 
@@ -76,6 +82,19 @@ histogram = meter.create_histogram(
     unit="seconds",
 )
 
+set_tracer_provider(
+    TracerProvider(resource=Resource.create({SERVICE_NAME: "sentiment-service-manual"}))
+)
+tracer = get_tracer_provider().get_tracer("mysentiment", "0.1.2")
+
+jaeger_exporter = JaegerExporter(
+    agent_host_name="localhost",
+    agent_port=6831,
+)
+
+span_processor = BatchSpanProcessor(jaeger_exporter)
+get_tracer_provider().add_span_processor(span_processor)
+
 app = FastAPI()
 
 class TextIn(BaseModel):
@@ -94,8 +113,16 @@ async def predict(payload: TextIn):
     counter.add(10, label)
 
     if payload.review != '':
-        review_handled = preprocessing(payload.review)
-        sentiment = predict_pipeline(review_handled)
+        with tracer.start_as_current_span("processors") as processors:
+            with tracer.start_as_current_span(
+                "preprocessing", links=[trace.Link(processors.get_span_context())]
+            ):
+                review_handled = preprocessing(payload.review)
+
+            with tracer.start_as_current_span(
+                "predictor", links=[trace.Link(processors.get_span_context())]
+            ):
+                sentiment = predict_pipeline(review_handled)
 
         ending_time = time()
         elapsed_time = ending_time - starting_time
@@ -113,6 +140,6 @@ async def predict(payload: TextIn):
 
         return {"error": "Please try again!"}
 
-
 if __name__ == '__main__':
+    FastAPIInstrumentor.instrument_app(app)
     uvicorn.run(app, host='0.0.0.0', port=30000)
