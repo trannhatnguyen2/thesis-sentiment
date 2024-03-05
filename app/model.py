@@ -3,7 +3,9 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from transformers import get_linear_schedule_with_warmup, AutoTokenizer, AutoModel, logging
 
-tokenizer = AutoTokenizer.from_pretrained("./phobert-base-v2", use_fast=True)
+tokenizer = AutoTokenizer.from_pretrained("./model_storage/phobert-base-v2", use_fast=True)
+
+model_bert = AutoModel.from_pretrained("./model_storage/phobert-base-v2")
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -12,7 +14,8 @@ class_names = ['Tiêu cực', 'Tích cực']
 class SentimentClassifier(nn.Module):
   def __init__(self, n_classes):
     super(SentimentClassifier, self).__init__()
-    self.bert = AutoModel.from_pretrained('vinai/phobert-base-v2')
+    # self.bert = AutoModel.from_pretrained('vinai/phobert-base-v2')
+    self.bert = model_bert
     self.drop = nn.Dropout(p=0.3)
     self.fc = nn.Linear(self.bert.config.hidden_size, n_classes)
     nn.init.normal_(self.fc.weight, std=0.02)

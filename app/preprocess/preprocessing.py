@@ -2,9 +2,9 @@ import string
 from underthesea import word_tokenize
 import re
 
-from preprocess.standarized_vietnamese import chuan_hoa_dau_cau_tieng_viet
-from preprocess.teencode import handle_teencode
-from preprocess.stopwords import handle_stopword
+from app.preprocess.standarized_vietnamese import chuan_hoa_dau_cau_tieng_viet
+from app.preprocess.teencode import handle_teencode
+from app.preprocess.stopwords import handle_stopword
 
 def remove_punctuation(w):
     return w not in string.punctuation
@@ -64,9 +64,3 @@ def preprocessing(text):
 
 
     return ' '.join(tokens)
-
-
-# text = 'Hôm nay, sp này có chút vấn đề về shop tôi phải đi vs và book ks ở đây cùng gd và nhận thích dv ở đây nv ok'
-# print(preprocessing(text))
-
-# print(preprocessing('Hôm nayyyyy,,, sp nàyyyy 🎃 có chút.. vấn đề  🤢     về shop anh \v hoà \n\n\n phảiii đi vs và book 👩🏻‍🏭👩🏻‍🏭👩🏻‍🏭 ks ở đây cùng gd và nhận thích dv ở đây nv ok'))

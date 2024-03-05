@@ -6,17 +6,13 @@ WORKDIR /app
 
 LABEL maintainer="nguyentn"
 
-COPY ./main.py /app/
+COPY ./app /app/app
 
-COPY ./requirements.txt /app/
+COPY ./main.py /app/
 
 COPY ./model_storage /app/model_storage
 
-COPY ./model /app/model
-
-COPY ./preprocess /app/preprocess
-
-COPY ./phobert-base-v2 /app/phobert-base-v2
+COPY ./requirements.txt /app/
 
 EXPOSE 30000
 

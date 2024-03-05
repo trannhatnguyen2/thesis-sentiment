@@ -1,6 +1,6 @@
 import pandas as pd
 
-teencode_dict = dict(pd.read_csv('preprocess/assets/teencode.txt', delimiter = '\t').values)
+teencode_dict = dict(pd.read_csv('app/preprocess/assets/teencode.txt', delimiter = '\t').values)
 
 def handle_teencode(text):
     w_split = text.split(' ')    

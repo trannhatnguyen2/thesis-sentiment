@@ -1,38 +1,3 @@
-# from fastapi import FastAPI
-# import uvicorn
-# from pydantic import BaseModel
-# from loguru import logger
-
-# from model.model import predict_pipeline
-# from preprocess.preprocessing import preprocessing
-
-# cache = {}
-
-# app = FastAPI()
-
-# class TextIn(BaseModel):
-#     review: str
-
-# class PredictionOut(BaseModel):
-#     sentiment: str
-
-# @app.get('/')
-# async def home():
-#     return {'text': "Nguyen's Thesis"}
-
-# @app.post("/predict", response_model=PredictionOut)
-# async def predict(payload: TextIn):
-
-#     if payload.review != '':
-#         review_handled = preprocessing(payload.review)
-#         sentiment = predict_pipeline(review_handled)
-
-#     return {"sentiment": sentiment}
-
-# if __name__ == '__main__':
-#     uvicorn.run(app)
-
-
 from fastapi import FastAPI
 import uvicorn
 from pydantic import BaseModel
@@ -52,8 +17,8 @@ from opentelemetry.trace import get_tracer_provider, set_tracer_provider
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from prometheus_client import start_http_server
 
-from model.model import predict_pipeline
-from preprocess.preprocessing  import preprocessing
+from app.model import predict_pipeline
+from app.preprocess.preprocessing  import preprocessing
 
 
 # Start Prometheus client
@@ -103,6 +68,10 @@ class TextIn(BaseModel):
 class PredictionOut(BaseModel):
     sentiment: str
 
+@app.get('/')
+async def home():
+    return {'script': "Nguyen's Thesis"}
+
 @app.post("/predict", response_model=PredictionOut)
 async def predict(payload: TextIn):
 
@@ -143,3 +112,41 @@ async def predict(payload: TextIn):
 if __name__ == '__main__':
     FastAPIInstrumentor.instrument_app(app)
     uvicorn.run(app, host='0.0.0.0', port=30000)
+
+
+
+
+# from fastapi import FastAPI
+# import uvicorn
+# from pydantic import BaseModel
+# from loguru import logger
+
+# from model.model import predict_pipeline
+# from preprocess.preprocessing import preprocessing
+
+# cache = {}
+
+# app = FastAPI()
+
+# class TextIn(BaseModel):
+#     review: str
+
+# class PredictionOut(BaseModel):
+#     sentiment: str
+
+# @app.get('/')
+# async def home():
+#     return {'text': "Nguyen's Thesis"}
+
+# @app.post("/predict", response_model=PredictionOut)
+# async def predict(payload: TextIn):
+
+#     if payload.review != '':
+#         review_handled = preprocessing(payload.review)
+#         sentiment = predict_pipeline(review_handled)
+
+#     return {"sentiment": sentiment}
+
+# if __name__ == '__main__':
+#     uvicorn.run(app)
+
