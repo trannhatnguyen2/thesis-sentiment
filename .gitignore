@@ -1,3 +1,4 @@
 data/
 model_storage/
 phobert-base-v2/
+__pycache__
